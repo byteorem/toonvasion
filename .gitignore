@@ -4,6 +4,7 @@
 /.claude
 CLAUDE.md
 .mcp.json
+TASK.md
 
 # dependencies
 /node_modules
