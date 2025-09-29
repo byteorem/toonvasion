@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	Card,
 	CardAction,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type * as React from "react";
+import Image from "next/image";
 
 interface InvasionCardProps {
 	title: string;
@@ -35,6 +36,7 @@ export function InvasionCard({
 				</CardDescription>
 				<CardAction>
 					<Avatar className="h-20 w-20">
+						<AvatarImage src="/images/cogs/Cog-bossbot-corporateraider.webp" />
 						<AvatarFallback className="bg-gray-400" />
 					</Avatar>
 				</CardAction>
