@@ -1,9 +1,11 @@
 "use client";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { api } from "@/trpc/react";
 import { InvasionCard } from "./InvasionCard";
 
 export default function InvasionsContainer() {
+	const [parent] = useAutoAnimate();
 	const {
 		data: invasions,
 		isLoading,
@@ -50,18 +52,25 @@ export default function InvasionsContainer() {
 	}
 
 	return (
-		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{invasions.map((invasion) => {
-				const [current, total] = invasion.progress.split("/").map(Number);
-				const progressPercent =
-					current && total ? Math.round((current / total) * 100) : 0;
+		<div ref={parent} className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+			{invasions
+				.map((invasion) => {
+					// TTR invasions typically last 30-45 minutes, using 45 minutes as estimate
+					const invasionDuration = 45 * 60; // 45 minutes in seconds
+					const elapsedSeconds = invasion.asOf - invasion.startTimestamp;
+					const remainingSeconds = Math.max(0, invasionDuration - elapsedSeconds);
 
-				// TTR invasions typically last 30-45 minutes, using 45 minutes as estimate
-				const invasionDuration = 45 * 60; // 45 minutes in seconds
-				const elapsedSeconds = invasion.asOf - invasion.startTimestamp;
-				const remainingSeconds = Math.max(0, invasionDuration - elapsedSeconds);
+					// Calculate time-based progress (100-0% based on remaining time)
+					const progressPercent = Math.round((remainingSeconds / invasionDuration) * 100);
 
-				return (
+					return {
+						invasion,
+						remainingSeconds,
+						progressPercent,
+					};
+				})
+				.filter(({ remainingSeconds }) => remainingSeconds > 0)
+				.map(({ invasion, remainingSeconds, progressPercent }) => (
 					<InvasionCard
 						key={invasion.district}
 						title={invasion.type}
@@ -69,8 +78,7 @@ export default function InvasionsContainer() {
 						remainingSeconds={remainingSeconds}
 						progress={progressPercent}
 					/>
-				);
-			})}
+				))}
 		</div>
 	);
 }
