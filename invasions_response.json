@@ -1,0 +1,48 @@
+{
+	"error": null,
+	"invasions": {
+		"Splatville": {
+			"asOf": 1759195127,
+			"type": "Back Stabber",
+			"progress": "474/4000",
+			"startTimestamp": 1759194935
+		},
+		"Fizzlefield": {
+			"asOf": 1759195131,
+			"type": "Glad Hander",
+			"progress": "4701/8000",
+			"startTimestamp": 1759192871
+		},
+		"Hiccup Hills": {
+			"asOf": 1759195129,
+			"type": "Double Talker",
+			"progress": "3558/8000",
+			"startTimestamp": 1759192964
+		},
+		"Splashport": {
+			"asOf": 1759195129,
+			"type": "Number Cruncher",
+			"progress": "2657/3000",
+			"startTimestamp": 1759193494
+		},
+		"Bounceboro": {
+			"asOf": 1759195121,
+			"type": "Two-Face",
+			"progress": "345/3000",
+			"startTimestamp": 1759195060
+		},
+		"Thwackville": {
+			"asOf": 1759195125,
+			"type": "Double Talker",
+			"progress": "4784/6000",
+			"startTimestamp": 1759192210
+		},
+		"Zoink Falls": {
+			"asOf": 1759195127,
+			"type": "Corporate Raider",
+			"progress": "838/3000",
+			"startTimestamp": 1759194618
+		}
+	},
+	"lastUpdated": 1759195132
+}

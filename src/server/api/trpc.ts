@@ -10,6 +10,7 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
+import { createTTRClient } from "@/server/clients/ttr_client";
 import { db } from "@/server/db";
 
 /**
@@ -27,6 +28,7 @@ import { db } from "@/server/db";
 export const createTRPCContext = async (opts: { headers: Headers }) => {
 	return {
 		db,
+		ttrClient: createTTRClient(),
 		...opts,
 	};
 };
@@ -104,3 +106,9 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+
+export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
+export type PublicHandler<T = undefined> = {
+	input: T;
+	ctx: TRPCContext;
+};

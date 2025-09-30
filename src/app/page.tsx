@@ -1,79 +1,7 @@
-import { InvasionCard } from "@/app/_components/InvasionCard";
-import { Badge } from "@/components/ui/badge";
+import InvasionsContainer from "@/app/_components/Invasions";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
 import { HydrateClient } from "@/trpc/server";
-import { Clock, Github, MapPin, Users } from "lucide-react";
-
-// Mock invasion data
-const mockInvasions = [
-	{
-		id: 1,
-		district: "Daisy Gardens",
-		invasionType: "Cog Invasion",
-		cogType: "Lawbots",
-		progress: 85,
-		timeRemaining: "12m 34s",
-		status: "ongoing",
-		playersActive: 15,
-	},
-	{
-		id: 2,
-		district: "Donald's Dock",
-		invasionType: "Skelecog Invasion",
-		cogType: "Sellbots",
-		progress: 45,
-		timeRemaining: "23m 18s",
-		status: "ongoing",
-		playersActive: 8,
-	},
-	{
-		id: 3,
-		district: "Minnie's Melodyland",
-		invasionType: "Cog Invasion",
-		cogType: "Cashbots",
-		progress: 100,
-		timeRemaining: "Completed",
-		status: "completed",
-		playersActive: 0,
-	},
-	{
-		id: 4,
-		district: "The Brrrgh",
-		invasionType: "Cog Invasion",
-		cogType: "Bossbots",
-		progress: 15,
-		timeRemaining: "35m 42s",
-		status: "ongoing",
-		playersActive: 22,
-	},
-	{
-		id: 5,
-		district: "Toontown Central",
-		invasionType: "Skelecog Invasion",
-		cogType: "Lawbots",
-		progress: 0,
-		timeRemaining: "Starting soon",
-		status: "upcoming",
-		playersActive: 3,
-	},
-	{
-		id: 6,
-		district: "Donald's Dreamland",
-		invasionType: "Cog Invasion",
-		cogType: "Sellbots",
-		progress: 92,
-		timeRemaining: "5m 12s",
-		status: "ongoing",
-		playersActive: 18,
-	},
-];
+import { Github, MapPin } from "lucide-react";
 
 export default async function Home() {
 	return (
@@ -110,17 +38,7 @@ export default async function Home() {
 					</div>
 
 					{/* Invasions Grid */}
-					<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-						{mockInvasions.map((invasion) => (
-							<InvasionCard
-								key={invasion.id}
-								title={invasion.cogType}
-								location={invasion.district}
-								timeRemaining={invasion.timeRemaining}
-								progress={invasion.progress}
-							/>
-						))}
-					</div>
+					<InvasionsContainer />
 				</main>
 			</div>
 		</HydrateClient>

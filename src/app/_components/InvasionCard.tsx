@@ -1,3 +1,4 @@
+import Countdown from "@/components/countdown";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	Card,
@@ -9,20 +10,20 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import type * as React from "react";
 import Image from "next/image";
+import type * as React from "react";
 
 interface InvasionCardProps {
 	title: string;
 	location: string;
-	timeRemaining: string;
+	remainingSeconds: number;
 	progress: number;
 }
 
 export function InvasionCard({
 	title,
 	location,
-	timeRemaining,
+	remainingSeconds,
 	progress,
 }: InvasionCardProps) {
 	return (
@@ -42,9 +43,10 @@ export function InvasionCard({
 				</CardAction>
 			</CardHeader>
 			<CardContent>
-				<p className="font-medium text-black text-xl">
-					{timeRemaining} remaining
-				</p>
+				<div className="flex items-center gap-2">
+					<Countdown seconds={remainingSeconds} />
+					<span className="font-medium text-black text-xl">remaining</span>
+				</div>
 			</CardContent>
 			<CardFooter>
 				<Progress value={progress} className="h-3 w-full" />
