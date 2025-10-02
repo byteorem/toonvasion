@@ -4,16 +4,20 @@ import { Button } from "@/components/ui/button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
+import type { CogType } from "@/types";
+
 export type InvasionData = {
 	district: string;
-	type: string;
+	cogName: string;
+	cogType: CogType | "unknown";
+	cogImage?: string;
 	remainingSeconds: number;
 	progressPercent: number;
 };
 
 export const columns: ColumnDef<InvasionData>[] = [
 	{
-		accessorKey: "type",
+		accessorKey: "cogType",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -29,13 +33,11 @@ export const columns: ColumnDef<InvasionData>[] = [
 			);
 		},
 		filterFn: (row, columnId, filterValue) => {
-			const selectedTypes = filterValue as Set<string>;
-			const invasionType = row.getValue(columnId) as string;
+			const selectedTypes = filterValue as string[];
+			const cogType = row.getValue(columnId) as string;
 
-			// Check if the invasion type contains any of the selected cog types
-			return Array.from(selectedTypes).some((cogType) =>
-				invasionType.includes(cogType),
-			);
+			// Exact match check for cog type
+			return selectedTypes.includes(cogType);
 		},
 	},
 	{

@@ -65,7 +65,9 @@ export default function InvasionsContainer() {
 
 			return {
 				district: invasion.district,
-				type: invasion.type,
+				cogName: invasion.cogName,
+				cogType: invasion.cogType ?? ("unknown" as const),
+				cogImage: invasion.cogImage,
 				remainingSeconds,
 				progressPercent,
 			};

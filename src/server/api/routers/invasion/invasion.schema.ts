@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { CogType } from "@/types";
 
 export const getInvasionsInput = z.undefined();
 
@@ -9,4 +10,7 @@ export type GetInvasionsOutput = Array<{
 	type: string;
 	progress: string;
 	startTimestamp: number;
+	cogName: string;
+	cogType?: CogType;
+	cogImage?: string;
 }>;

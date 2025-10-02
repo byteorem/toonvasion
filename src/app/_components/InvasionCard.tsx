@@ -17,6 +17,7 @@ interface InvasionCardProps {
 	location: string;
 	remainingSeconds: number;
 	progress: number;
+	cogImage?: string;
 }
 
 export function InvasionCard({
@@ -24,6 +25,7 @@ export function InvasionCard({
 	location,
 	remainingSeconds,
 	progress,
+	cogImage,
 }: InvasionCardProps) {
 	return (
 		<Card className="w-full max-w-md bg-white">
@@ -36,7 +38,7 @@ export function InvasionCard({
 				</CardDescription>
 				<CardAction>
 					<Avatar className="h-20 w-20">
-						<AvatarImage src="/images/cogs/Cog-bossbot-corporateraider.webp" />
+						<AvatarImage src={cogImage} />
 						<AvatarFallback className="bg-gray-400" />
 					</Avatar>
 				</CardAction>

@@ -11,31 +11,44 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, ColumnFiltersState } from "@tanstack/react-table";
 import {
 	getCoreRowModel,
 	getFilteredRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { CirclePlus } from "lucide-react";
+import { ListFilter, Search } from "lucide-react";
 import { InvasionCard } from "./InvasionCard";
 import type { InvasionData } from "./invasions-columns";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { COGS } from "@/lib/constants";
 
 interface InvasionsDataTableProps {
 	columns: ColumnDef<InvasionData>[];
 	data: InvasionData[];
 }
 
-const COG_TYPES = ["Sellbot", "Cashbot", "Lawbot", "Bossbot"] as const;
+const COG_TYPES = [
+	{ value: "sellbot", label: "Sellbot" },
+	{ value: "cashbot", label: "Cashbot" },
+	{ value: "lawbot", label: "Lawbot" },
+	{ value: "bossbot", label: "Bossbot" },
+] as const;
 
 export function InvasionsDataTable({
 	columns,
 	data,
 }: InvasionsDataTableProps) {
 	const [parent] = useAutoAnimate();
-	const [selectedCogTypes, setSelectedCogTypes] = React.useState<Set<string>>(
-		new Set(COG_TYPES),
+	const [searchQuery, setSearchQuery] = React.useState("");
+	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+		[
+			{
+				id: "cogType",
+				value: COG_TYPES.map((t) => t.value),
+			},
+		],
 	);
 
 	const table = useReactTable({
@@ -44,58 +57,97 @@ export function InvasionsDataTable({
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		state: {
-			columnFilters: [
-				{
-					id: "type",
-					value: selectedCogTypes,
-				},
-			],
+			columnFilters,
 		},
+		onColumnFiltersChange: setColumnFilters,
 	});
 
 	const toggleCogType = (cogType: string) => {
-		setSelectedCogTypes((prev) => {
-			const newSet = new Set(prev);
-			if (newSet.has(cogType)) {
-				newSet.delete(cogType);
-			} else {
-				newSet.add(cogType);
-			}
-			return newSet;
-		});
+		const currentFilter = columnFilters.find((f) => f.id === "cogType");
+		const currentValues = (currentFilter?.value as string[]) ?? [];
+
+		const newValues = currentValues.includes(cogType)
+			? currentValues.filter((type) => type !== cogType)
+			: [...currentValues, cogType];
+
+		setColumnFilters([
+			{
+				id: "cogType",
+				value: newValues,
+			},
+		]);
 	};
+
+	const selectedCogTypes =
+		(columnFilters.find((f) => f.id === "cogType")?.value as string[]) ?? [];
+
+	// Filter cog types based on search query
+	const filteredCogTypes = COG_TYPES.filter((cogType) =>
+		cogType.label.toLowerCase().includes(searchQuery.toLowerCase()),
+	);
+
+	// Calculate invasion counts per cog type
+	const cogTypeCounts = React.useMemo(() => {
+		const counts: Record<string, number> = {};
+		for (const cogType of COG_TYPES) {
+			counts[cogType.value] = data.filter((invasion) => invasion.cogType === cogType.value).length;
+		}
+		return counts;
+	}, [data]);
+
+	const filterCount = selectedCogTypes.length;
+	const allSelected = filterCount === COG_TYPES.length;
 
 	return (
 		<div className="w-full space-y-4">
 			{/* Filter Controls */}
 			<div className="flex items-center gap-2">
-				<Input
-					placeholder="Filter invasions..."
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						// Mock filtering - will be implemented later
-						console.log("Filter value:", event.target.value);
-					}}
-					className="max-w-sm"
-				/>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="gap-2">
-							<CirclePlus className="h-4 w-4" />
+						<Button
+							variant="outline"
+							className="gap-2"
+							aria-label={`Filter by cog type. ${filterCount} of ${COG_TYPES.length} selected`}
+						>
+							<ListFilter className="h-4 w-4" />
 							Cog Type
+							{filterCount > 0 && filterCount < COG_TYPES.length && (
+								<span className="ml-1 rounded-full bg-primary px-2 py-0.5 font-medium text-primary-foreground text-xs">
+									{filterCount}
+								</span>
+							)}
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent className="w-56">
-						<DropdownMenuLabel>Filter by Cog Type</DropdownMenuLabel>
+					<DropdownMenuContent className="w-64">
+						<div className="p-2">
+							<div className="relative">
+								<Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
+								<Input
+									placeholder="Cog Type"
+									value={searchQuery}
+									onChange={(e) => setSearchQuery(e.target.value)}
+									className="h-9 pl-8"
+								/>
+							</div>
+						</div>
 						<DropdownMenuSeparator />
-						{COG_TYPES.map((cogType) => (
-							<DropdownMenuCheckboxItem
-								key={cogType}
-								checked={selectedCogTypes.has(cogType)}
-								onCheckedChange={() => toggleCogType(cogType)}
-							>
-								{cogType}
-							</DropdownMenuCheckboxItem>
-						))}
+						<div className="max-h-64 overflow-y-auto">
+							{filteredCogTypes.map((cogType) => {
+								const cogData = COGS.find((c) => c.type === cogType.value);
+								const count = cogTypeCounts[cogType.value] ?? 0;
+								return (
+									<DropdownMenuCheckboxItem
+										key={cogType.value}
+										checked={selectedCogTypes.includes(cogType.value)}
+										onCheckedChange={() => toggleCogType(cogType.value)}
+										className="gap-2"
+									>
+										<span className="flex-1">{cogType.label}</span>
+										<span className="text-muted-foreground text-xs">{count}</span>
+									</DropdownMenuCheckboxItem>
+								);
+							})}
+						</div>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
@@ -111,10 +163,11 @@ export function InvasionsDataTable({
 						return (
 							<InvasionCard
 								key={invasion.district}
-								title={invasion.type}
+								title={invasion.cogName}
 								location={invasion.district}
 								remainingSeconds={invasion.remainingSeconds}
 								progress={invasion.progressPercent}
+								cogImage={invasion.cogImage}
 							/>
 						);
 					})
