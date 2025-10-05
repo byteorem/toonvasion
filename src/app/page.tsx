@@ -1,6 +1,6 @@
 import InvasionsContainer from "@/app/_components/Invasions";
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import { HydrateClient } from "@/trpc/server";
 import { Github, MapPin } from "lucide-react";
 

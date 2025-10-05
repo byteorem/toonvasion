@@ -15,7 +15,9 @@ function normalizeCogName(name: string): string {
  */
 export function findCogByName(name: string): Cog | undefined {
 	const normalizedSearchName = normalizeCogName(name);
-	return COGS.find((cog) => normalizeCogName(cog.name) === normalizedSearchName);
+	return COGS.find(
+		(cog) => normalizeCogName(cog.name) === normalizedSearchName,
+	);
 }
 
 /**

@@ -1,5 +1,5 @@
-import { z } from "zod";
 import type { CogType } from "@/types";
+import { z } from "zod";
 
 export const getInvasionsInput = z.undefined();
 

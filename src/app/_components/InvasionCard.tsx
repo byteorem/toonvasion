@@ -30,7 +30,7 @@ export function InvasionCard({
 	return (
 		<Card className="w-full max-w-md bg-card">
 			<CardHeader>
-				<CardTitle className="font-black text-2xl text-card-foreground uppercase tracking-tighter whitespace-nowrap">
+				<CardTitle className="whitespace-nowrap font-black text-2xl text-card-foreground uppercase tracking-tighter">
 					{title}
 				</CardTitle>
 				<CardDescription className="font-normal text-card-foreground text-xl">
@@ -46,7 +46,9 @@ export function InvasionCard({
 			<CardContent>
 				<div className="flex items-center gap-2">
 					<Countdown seconds={remainingSeconds} />
-					<span className="font-medium text-card-foreground text-xl">remaining</span>
+					<span className="font-medium text-card-foreground text-xl">
+						remaining
+					</span>
 				</div>
 			</CardContent>
 			<CardFooter>

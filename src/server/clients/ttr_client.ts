@@ -1,8 +1,8 @@
 import ky from "ky";
 import mockData from "../../../invasions_response.json";
 
-import type { Cog, CogType } from "@/types";
 import { findCogByName } from "@/lib/cog-mapper";
+import type { Cog, CogType } from "@/types";
 
 // Types based on the TTR API response structure
 export interface Invasion {
@@ -36,19 +36,21 @@ export interface EnrichedInvasionsResponse {
  * Enriches invasion data with cog metadata (type and image)
  * Converts the invasions object to an array with district names included
  */
-export function enrichInvasionData(response: InvasionsResponse): EnrichedInvasionsResponse {
-	const enrichedInvasions: EnrichedInvasion[] = Object.entries(response.invasions).map(
-		([district, invasion]) => {
-			const cog = findCogByName(invasion.type);
-			return {
-				...invasion,
-				district,
-				cogName: invasion.type,
-				cogType: cog?.type,
-				cogImage: cog?.image,
-			};
-		},
-	);
+export function enrichInvasionData(
+	response: InvasionsResponse,
+): EnrichedInvasionsResponse {
+	const enrichedInvasions: EnrichedInvasion[] = Object.entries(
+		response.invasions,
+	).map(([district, invasion]) => {
+		const cog = findCogByName(invasion.type);
+		return {
+			...invasion,
+			district,
+			cogName: invasion.type,
+			cogType: cog?.type,
+			cogImage: cog?.image,
+		};
+	});
 
 	return {
 		error: response.error,

@@ -1,6 +1,6 @@
 import type { PublicHandler } from "@/server/api/trpc";
-import type * as Schema from "./invasion.schema";
 import { enrichInvasionData } from "@/server/clients/ttr_client";
+import type * as Schema from "./invasion.schema";
 
 export async function getInvasions({
 	ctx,
