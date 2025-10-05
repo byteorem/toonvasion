@@ -1,12 +1,13 @@
 import InvasionsContainer from "@/app/_components/Invasions";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { HydrateClient } from "@/trpc/server";
 import { Github, MapPin } from "lucide-react";
 
 export default async function Home() {
 	return (
 		<HydrateClient>
-			<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+			<div className="min-h-screen ">
 				{/* Header */}
 				<header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 					<div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -14,17 +15,20 @@ export default async function Home() {
 							<MapPin className="h-6 w-6 text-primary" />
 							<h1 className="font-bold text-primary text-xl">Toonvasion</h1>
 						</div>
-						<Button variant="outline" size="sm" asChild>
-							<a
-								href="https://github.com"
-								target="_blank"
-								rel="noopener noreferrer"
-								className="flex items-center gap-2"
-							>
-								<Github className="h-4 w-4" />
-								GitHub
-							</a>
-						</Button>
+						<div className="flex items-center gap-2">
+							<Button variant="outline" size="sm" asChild>
+								<a
+									href="https://github.com"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="flex items-center gap-2"
+								>
+									<Github className="h-4 w-4" />
+									GitHub
+								</a>
+							</Button>
+							<ThemeToggle />
+						</div>
 					</div>
 				</header>
 

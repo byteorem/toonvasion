@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -18,11 +17,9 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { ListFilter, Search } from "lucide-react";
+import { ListFilter } from "lucide-react";
 import { InvasionCard } from "./InvasionCard";
 import type { InvasionData } from "./invasions-columns";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { COGS } from "@/lib/constants";
 
 interface InvasionsDataTableProps {
 	columns: ColumnDef<InvasionData>[];
@@ -41,7 +38,6 @@ export function InvasionsDataTable({
 	data,
 }: InvasionsDataTableProps) {
 	const [parent] = useAutoAnimate();
-	const [searchQuery, setSearchQuery] = React.useState("");
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[
 			{
@@ -81,11 +77,6 @@ export function InvasionsDataTable({
 	const selectedCogTypes =
 		(columnFilters.find((f) => f.id === "cogType")?.value as string[]) ?? [];
 
-	// Filter cog types based on search query
-	const filteredCogTypes = COG_TYPES.filter((cogType) =>
-		cogType.label.toLowerCase().includes(searchQuery.toLowerCase()),
-	);
-
 	// Calculate invasion counts per cog type
 	const cogTypeCounts = React.useMemo(() => {
 		const counts: Record<string, number> = {};
@@ -119,21 +110,10 @@ export function InvasionsDataTable({
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-64">
-						<div className="p-2">
-							<div className="relative">
-								<Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
-								<Input
-									placeholder="Cog Type"
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-									className="h-9 pl-8"
-								/>
-							</div>
-						</div>
+						<DropdownMenuLabel>Cog Types</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<div className="max-h-64 overflow-y-auto">
-							{filteredCogTypes.map((cogType) => {
-								const cogData = COGS.find((c) => c.type === cogType.value);
+							{COG_TYPES.map((cogType) => {
 								const count = cogTypeCounts[cogType.value] ?? 0;
 								return (
 									<DropdownMenuCheckboxItem
@@ -172,11 +152,11 @@ export function InvasionsDataTable({
 						);
 					})
 				) : (
-					<div className="col-span-full flex flex-col items-center justify-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-8">
-						<h3 className="font-semibold text-gray-900 text-lg">
+					<div className="col-span-full flex flex-col items-center justify-center gap-2 rounded-lg border bg-muted/50 p-8">
+						<h3 className="font-semibold text-foreground text-lg">
 							No invasions found
 						</h3>
-						<p className="text-gray-600">Try adjusting your filters</p>
+						<p className="text-muted-foreground">Try adjusting your filters</p>
 					</div>
 				)}
 			</div>

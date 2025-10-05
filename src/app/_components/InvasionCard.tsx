@@ -28,25 +28,25 @@ export function InvasionCard({
 	cogImage,
 }: InvasionCardProps) {
 	return (
-		<Card className="w-full max-w-md bg-white">
+		<Card className="w-full max-w-md bg-card">
 			<CardHeader>
-				<CardTitle className="font-black text-3xl text-black uppercase tracking-tight">
+				<CardTitle className="font-black text-2xl text-card-foreground uppercase tracking-tighter whitespace-nowrap">
 					{title}
 				</CardTitle>
-				<CardDescription className="font-normal text-black text-xl">
+				<CardDescription className="font-normal text-card-foreground text-xl">
 					{location}
 				</CardDescription>
 				<CardAction>
 					<Avatar className="h-20 w-20">
 						<AvatarImage src={cogImage} />
-						<AvatarFallback className="bg-gray-400" />
+						<AvatarFallback className="bg-muted" />
 					</Avatar>
 				</CardAction>
 			</CardHeader>
 			<CardContent>
 				<div className="flex items-center gap-2">
 					<Countdown seconds={remainingSeconds} />
-					<span className="font-medium text-black text-xl">remaining</span>
+					<span className="font-medium text-card-foreground text-xl">remaining</span>
 				</div>
 			</CardContent>
 			<CardFooter>
